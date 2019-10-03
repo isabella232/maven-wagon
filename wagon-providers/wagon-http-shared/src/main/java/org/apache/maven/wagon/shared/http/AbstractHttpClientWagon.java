@@ -61,7 +61,6 @@ import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
-import org.apache.http.impl.client.DefaultServiceUnavailableRetryStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -488,7 +487,8 @@ public abstract class AbstractHttpClientWagon
             .disableConnectionState() //
             .setConnectionManager( httpClientConnectionManager ) //
             .setRetryHandler( createRetryHandler() )
-            .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy(10, 1000))
+            .setServiceUnavailableRetryStrategy(
+                    new SimpleServiceUnavailableRetryStrategy( 10, 1000 ) )
             .setDefaultAuthSchemeRegistry( createAuthSchemeRegistry() )
             .build();
     }
@@ -1295,4 +1295,5 @@ public abstract class AbstractHttpClientWagon
     {
         return MAX_BACKOFF_WAIT_SECONDS;
     }
+
 }

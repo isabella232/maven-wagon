@@ -47,6 +47,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.execchain.RedirectExec;
 import org.apache.http.impl.execchain.RetryExec;
+import org.apache.http.impl.execchain.ServiceUnavailableRetryExec;
 import org.apache.maven.wagon.InputData;
 import org.apache.maven.wagon.repository.Repository;
 import org.apache.maven.wagon.resource.Resource;
@@ -201,15 +202,21 @@ public class AbstractHttpClientWagonTest
             {
                 requestExecutor.setAccessible( true );
             }
-            final RetryExec requestExecutorInstance = RetryExec.class.cast(
+            final ServiceUnavailableRetryExec requestExecutorInstance = ServiceUnavailableRetryExec.class.cast(
                     requestExecutor.get( redirectExecInstance ) );
 
-            final Field retryHandler = requestExecutorInstance.getClass().getDeclaredField( "retryHandler" );
+            final Field childExecField = requestExecutorInstance.getClass().getDeclaredField( "requestExecutor" );
+            if( !childExecField.isAccessible() ) {
+                childExecField.setAccessible( true );;
+            }
+            Object childExec = childExecField.get( requestExecutorInstance );
+
+            final Field retryHandler = childExec.getClass().getDeclaredField( "retryHandler" );
             if ( !retryHandler.isAccessible() )
             {
                 retryHandler.setAccessible( true );
             }
-            return HttpRequestRetryHandler.class.cast( retryHandler.get( requestExecutorInstance ) );
+            return HttpRequestRetryHandler.class.cast( retryHandler.get( childExec ) );
         }
         catch ( final Exception e )
         {
