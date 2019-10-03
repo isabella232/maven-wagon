@@ -29,7 +29,7 @@ under the License.
 
   <groupId>org.apache.maven.wagon</groupId>
   <artifactId>wagon</artifactId>
-  <version>3.3.3</version>
+  <version>3.3.3-atlassian-01</version>
   <packaging>pom</packaging>
 
   <name>Apache Maven Wagon</name>
@@ -217,6 +217,16 @@ under the License.
       <id>apache.website</id>
       <url>scm:svn:https://svn.apache.org/repos/asf/maven/website/components/${maven.site.path}</url>
     </site>
+    <repository>
+      <id>maven-atlassian-com</id>
+      <name>Atlassian Private Repository</name>
+      <url>https://packages.atlassian.com/maven/3rdparty</url>
+    </repository>
+    <snapshotRepository>
+      <id>maven-atlassian-com</id>
+      <name>Atlassian Private Snapshot Repository</name>
+      <url>https://packages.atlassian.com/maven/3rdparty-snapshot</url>
+    </snapshotRepository>
   </distributionManagement>
 
   <modules>
