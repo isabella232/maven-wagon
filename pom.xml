@@ -213,10 +213,6 @@ under the License.
   </ciManagement>
 
   <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <url>scm:svn:https://svn.apache.org/repos/asf/maven/website/components/${maven.site.path}</url>
-    </site>
     <repository>
       <id>maven-atlassian-com</id>
       <name>Atlassian Private Repository</name>
